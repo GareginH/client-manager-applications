@@ -36,7 +36,7 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-
+    //Roles
     public function roles()
     {
         return $this->belongsToMany(Role::class);
@@ -48,5 +48,16 @@ class User extends Authenticatable
             return true;
         }
         return false;
+    }
+    //Applications
+    public function applications()
+    {
+        return $this->hasMany(Application::class);
+    }
+
+    //Messages
+    public function messages()
+    {
+        return $this->hasMany(Message::class);
     }
 }
