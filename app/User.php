@@ -60,7 +60,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Application::class);
     }
-
+    public function seenPosts(){
+        return $this->hasMany(Application::class, 'seen_by');
+    }
     //Messages
     public function messages()
     {
