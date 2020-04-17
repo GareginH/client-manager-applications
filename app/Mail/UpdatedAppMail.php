@@ -18,15 +18,18 @@ class UpdatedAppMail extends Mailable
      * @var Application
      */
     protected $application;
+    protected $url;
 
     /**
      * Changes in application
      *
      * @param Application $application
+     * @param $url
      */
-    public function __construct(Application $application)
+    public function __construct(Application $application, $url)
     {
         $this->application = $application;
+        $this->url = $url;
     }
 
     /**
@@ -40,6 +43,7 @@ class UpdatedAppMail extends Mailable
             'applicant'=>$this->application->user->name,
             'subject'=>$this->application->subject,
             'content'=> $this->application->content,
+            'url'=>$this->url,
         ]);
     }
 }

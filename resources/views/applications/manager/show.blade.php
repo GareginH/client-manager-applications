@@ -35,9 +35,11 @@
                             <div class=" mb-3">
                                 <p>{{$message->content}}</p>
                             </div>
+                            @if($message->file_url != null)
                             <div class=" mb-3">
                                 <a href="http://agilo/storage/{{$message->file_url}}">Скачать файл</a>
                             </div>
+                            @endif
                             <div class="mb-3 float-right">
                                 {{$message->user->name}}:
                                 {{$message->created_at}}
@@ -46,7 +48,7 @@
                     </div>
                 @endforeach
                 @if($application->active)
-                <div class="card">
+                <div class="card mt-3">
                     <div class="card-header text-uppercase">ответное сообщение</div>
 
                     <div class="card-body">

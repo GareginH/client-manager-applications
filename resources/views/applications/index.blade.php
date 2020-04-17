@@ -5,7 +5,9 @@
         <div class="row justify-content-center">
             <div class="col-md-12">
                 <div class="card">
-                    <div class="card-header font-weight-bold">Заявки @if($dayPassed)<a href="{{route('application.create')}}" class="btn btn-primary float-right">Добавить Заявку</a>@endif</div>
+                    <div class="card-header font-weight-bold">Заявки @if($dayPassed)<a href="{{route('application.create')}}" class="btn btn-primary float-right">Добавить Заявку</a>@else
+                            <button type="button" class="btn btn-outline-danger float-right" data-toggle="popover" title="Добавить Заявку" data-content="Должны пройти сутки с момента вашей последной заявки.">Добавить Заявку</button>
+                        @endif</div>
 
                     <table class="table">
                         <thead>

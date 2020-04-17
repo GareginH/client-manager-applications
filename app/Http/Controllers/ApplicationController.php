@@ -10,6 +10,7 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use Grosv\LaravelPasswordlessLogin\LoginUrl;
 
 class ApplicationController extends Controller
 {
@@ -80,14 +81,23 @@ class ApplicationController extends Controller
         $managerRole = Role::where('name', 'manager')->first();
         $managerId = DB::table('role_user')->where('role_id', $managerRole->id)->first()->user_id;
         $managerEmail = User::find($managerId)->email;
-        Mail::to($managerEmail)->send(new CreatedAppMail($application));
+
+        $manager = User::find($managerId);
+        $generator = new LoginUrl($manager);
+        $generator->setRedirectUrl('/manager/applications/'.$application->id); // Override the default url to redirect to after login
+        $url = $generator->generate();
+        Mail::to($managerEmail)->send(new CreatedAppMail($application, $url));
 
         return redirect('/');
     }
 
     public function update(Application $application){
         if($application->manager){
-            Mail::to($application->manager->email)->send(new UpdatedAppMail($application));
+            $manager = $application->manager;
+            $generator = new LoginUrl($manager);
+            $generator->setRedirectUrl('/manager/applications/'.$application->id); // Override the default url to redirect to after login
+            $url = $generator->generate();
+            Mail::to($application->manager->email)->send(new UpdatedAppMail($application, $url));
         }
         $application->update(['active'=>false]);
         return redirect('/applications');

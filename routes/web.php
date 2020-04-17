@@ -22,9 +22,7 @@ Route::group(
         'middleware' => ['auth'],
     ],
     function () {
-
         Route::post('/applications/{application}', 'MessageController@store')->name('message.store');
-
     });
 Route::group(
     [
@@ -52,8 +50,13 @@ Route::group(
 
     });
 Route::get('/home', 'ApplicationController@index')->name('home');
-//Route::get('/mail', function (){
-//    $app = \App\Application::find(1);
-//    //Mail::to('manager@manager.com')->send(new CreatedAppMail($app));
-//    return new UpdatedAppMail($app);
-//});
+Route::get('/mail', function (){
+    //$app = \App\Application::find(1);
+    //Mail::to('manager@manager.com')->send(new CreatedAppMail($app));
+    //return new UpdatedAppMail($app);
+    $user = auth()->user();
+    dd($user);
+    $application = \App\Application::find(1);
+    $messages = $application->messages()->get();
+    return view('applications.manager.show', compact('application', 'messages'));
+});

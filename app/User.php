@@ -70,6 +70,9 @@ class User extends Authenticatable
     }
 
     public function dayPassed(){
-        return $this->applications()->latest()->first()->created_at < Carbon::now()->subDay();
+        if(!$this->applications()->get()->isEmpty()){
+            return $this->applications()->latest()->first()->created_at < Carbon::now()->subDay();
+        }
+        return true;
     }
 }

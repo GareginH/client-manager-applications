@@ -53,7 +53,6 @@ class ManagerApplicationController extends Controller
     public function show(Application $application){
         $user = auth()->user();
         $messages = $application->messages()->get();
-        $application->update(['seen_by'=>null]);
         if(!$application->seenBy){
             $application->update(['seen_by'=>$user->id]); //Make post 'seen' by manager
         }

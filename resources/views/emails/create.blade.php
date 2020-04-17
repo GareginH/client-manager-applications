@@ -7,7 +7,7 @@
 
 [Прикрепленный файл]({{$file}})
 
-@component('mail::button', ['url' => ''])
+@component('mail::button', ['url' => $url])
 Перейти
 @endcomponent
 

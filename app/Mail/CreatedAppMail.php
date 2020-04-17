@@ -17,15 +17,18 @@ class CreatedAppMail extends Mailable
      * @var Application
      */
     protected $application;
+    protected $url;
 
     /**
      * Create a new message instance.
      *
      * @param Application $application
+     * @param $url
      */
-    public function __construct(Application $application)
+    public function __construct(Application $application, $url)
     {
         $this->application = $application;
+        $this->url = $url;
     }
 
     /**
@@ -40,6 +43,7 @@ class CreatedAppMail extends Mailable
             'subject'=>$this->application->subject,
             'content'=>$this->application->content,
             'file'=>$this->application->file_url?'http://agilo/storage/'.$this->application->file_url:'#',
+            'url'=>$this->url,
         ]);
     }
 }
