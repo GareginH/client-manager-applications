@@ -17,7 +17,7 @@ class CreateMessagesTable extends Migration
             $table->id();
             $table->integer('user_id');
             $table->text('content');
-            $table->string('file_url');
+            $table->string('file_url')->nullable();
             $table->timestamps();
         });
     }

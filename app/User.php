@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -49,6 +50,11 @@ class User extends Authenticatable
         }
         return false;
     }
+
+    public function isManager()
+    {
+        return $this->roles()->where('name', 'Manager')->first();
+    }
     //Applications
     public function applications()
     {
@@ -59,5 +65,9 @@ class User extends Authenticatable
     public function messages()
     {
         return $this->hasMany(Message::class);
+    }
+
+    public function dayPassed(){
+        return $this->applications()->latest()->first()->created_at < Carbon::now()->subDay();
     }
 }

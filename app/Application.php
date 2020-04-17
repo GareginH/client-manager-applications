@@ -12,7 +12,6 @@ class Application extends Model
     {
         return $this->belongsTo(User::class);
     }
-
     public function manager(){
         return $this->belongsTo(User::class, 'manager_id');
     }

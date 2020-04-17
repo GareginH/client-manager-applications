@@ -3,8 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Application;
+use App\Mail\CreatedAppMail;
+use App\Mail\UpdatedAppMail;
+use App\Role;
+use App\User;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class ApplicationController extends Controller
 {
@@ -22,21 +27,25 @@ class ApplicationController extends Controller
     {
         $user = auth()->user();
         $applications = $user->applications;
+        $dayPassed = $user->dayPassed();
         if(!$applications){
             return redirect('/home');
         }
-        return view('applications.index', compact('applications'));
+        return view('applications.index', compact('applications', 'dayPassed'));
     }
 
     public function create()
     {
-        // TODO: Send email to manager on application creation.
-        return view('applications.create');
+        //Check if 24 hours have passed before creating new application / Проверить прошли ли сутки
+        if(auth()->user()->dayPassed()){
+            return view('applications.create');
+        }
+        return redirect('/');
     }
     public function show(Application $application){
         $user = auth()->user();
         $messages = $application->messages()->get();
-        if($application->user == $user){ //Make sure its our application
+        if($application->user == $user){
             return view('applications.show', compact('application', 'messages'));
         }
         return abort(403);
@@ -44,24 +53,42 @@ class ApplicationController extends Controller
 
     public function store(Request $request)
     {
+        $request->validate([
+            'subject'=>'required|string|',
+            'content' => 'required|string',
+            'file' => 'required|max:5000',
+        ]);
+
         $user = auth()->user();
 
-        $file = $request->file('file');
-        $fileName = time() . '.' . $file->getClientOriginalName();
-        $file->storeAs('public/files', $fileName);
-        $path = 'files/'.$fileName;
+        $path = null;
+        if($request['file']){
+            $file = $request->file('file');
+            $fileName = time() . '.' . $file->getClientOriginalName();
+            $file->storeAs('public/files', $fileName);
+            $path = 'files/'.$fileName;
+        }
 
-        $user->applications()->create([
+        $application = $user->applications()->create([
             'subject' => $request['subject'],
             'content' => $request['content'],
             'file_url' => $path,
         ]);
         $applications = $user->applications;
-        return view('applications.index', compact('applications'));
+
+        //Mail
+        $managerRole = Role::where('name', 'manager')->first();
+        $managerId = DB::table('role_user')->where('role_id', $managerRole->id)->first()->user_id;
+        $managerEmail = User::find($managerId)->email;
+        Mail::to($managerEmail)->send(new CreatedAppMail($application));
+
+        return redirect('/');
     }
 
     public function update(Application $application){
-        // TODO: Send email to manager about new messages or status change.
+        if($application->manager){
+            Mail::to($application->manager->email)->send(new UpdatedAppMail($application));
+        }
         $application->update(['active'=>false]);
         return redirect('/applications');
     }

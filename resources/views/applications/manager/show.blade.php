@@ -45,10 +45,20 @@
                         </div>
                     </div>
                 @endforeach
+                @if($application->active)
                 <div class="card">
                     <div class="card-header text-uppercase">ответное сообщение</div>
 
                     <div class="card-body">
+                        @if ($errors->any())
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
                         <form method="POST" action="{{ route('message.store', $application->id) }}" enctype="multipart/form-data">
                             @csrf
                             <label for="content">Сообщение</label>
@@ -65,6 +75,7 @@
                         </form>
                     </div>
                 </div>
+                @endif
             </div>
         </div>
     </div>
