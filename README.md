@@ -10,13 +10,15 @@
     - php artisan key:generate
     - php artisan storage:link
     - php artisan migrate --seed
+    - php artisan serve
     
 ## How to use this
     - Git clone https://github.com/GareginH/client-manager-applications.git
     - composer install
     - npm i
     - copy .env.example and rename it to .env
-        -in .env add your database(DB_) and mail(MAIL_) info
+        - edit .env and add your database(DB_) and mail(MAIL_) info, I use https://mailtrap.io/ for testing.
     - php artisan key:generate
     - php artisan storage:link
     - php artisan migrate --seed
+    - php artisan serve

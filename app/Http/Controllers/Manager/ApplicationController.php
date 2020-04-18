@@ -4,13 +4,10 @@ namespace App\Http\Controllers\Manager;
 
 use App\Application;
 use App\Http\Controllers\Controller;
-use App\Message;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
-use Illuminate\View\View;
 
-class ManagerApplicationController extends Controller
+class ApplicationController extends Controller
 {
     /**
      * Create a new controller instance.

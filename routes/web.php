@@ -44,19 +44,9 @@ Route::group(
         'middleware' => ['auth', 'isManager'],
     ],
     function () {
-        Route::get('applications', 'ManagerApplicationController@index');
-        Route::get('applications/{application}', 'ManagerApplicationController@show')->name('application.manager.show');
-        Route::patch('applications/{application}', 'ManagerApplicationController@update')->name('application.manager.accept');
+        Route::get('applications', 'ApplicationController@index');
+        Route::get('applications/{application}', 'ApplicationController@show')->name('application.manager.show');
+        Route::patch('applications/{application}', 'ApplicationController@update')->name('application.manager.accept');
 
     });
 Route::get('/home', 'ApplicationController@index')->name('home');
-Route::get('/mail', function (){
-    //$app = \App\Application::find(1);
-    //Mail::to('manager@manager.com')->send(new CreatedAppMail($app));
-    //return new UpdatedAppMail($app);
-    $user = auth()->user();
-    dd($user);
-    $application = \App\Application::find(1);
-    $messages = $application->messages()->get();
-    return view('applications.manager.show', compact('application', 'messages'));
-});
