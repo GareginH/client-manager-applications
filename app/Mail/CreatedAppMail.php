@@ -42,7 +42,7 @@ class CreatedAppMail extends Mailable
             'applicant'=>$this->application->user->name,
             'subject'=>$this->application->subject,
             'content'=>$this->application->content,
-            'file'=>$this->application->file_url?'http://agilo/storage/'.$this->application->file_url:'#',
+            'file'=>$this->application->file_url?config('app.domain').'storage/'.$this->application->file_url:'#',
             'url'=>$this->url,
         ]);
     }

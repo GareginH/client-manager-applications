@@ -47,7 +47,7 @@
                         </div>
                     </div>
                 @endforeach
-                @if($application->active)
+                @if($application->active && $application->manager)
                 <div class="card mt-3">
                     <div class="card-header text-uppercase">ответное сообщение</div>
 

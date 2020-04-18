@@ -23,14 +23,5 @@ class UsersSeeder extends Seeder
         ]);
         $managerRole = Role::where('name', 'manager')->first();
         $manager->roles()->attach($managerRole);
-        ///////////////////////////////////////////////////////////////Temporary user
-        $client = User::create([
-            'name' => 'Client',
-            'email' => 'client@client.com',
-            'password' => Hash::make('password')
-        ]);
-        $clientRole = Role::where('name', 'client')->first();
-        $client->roles()->attach($clientRole);
-        //////////////////////////////////////////////////////////////
     }
 }
